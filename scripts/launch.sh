@@ -9,6 +9,8 @@ function launch {
     exec "${BASH_SOURCE[0]}"
   fi
 
+  git pull
+
   # no cpu rationing for now
   echo 0-3 > /dev/cpuset/background/cpus
   echo 0-3 > /dev/cpuset/system-background/cpus
