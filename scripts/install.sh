@@ -13,17 +13,32 @@ cd /data;
 # echo 'Uninstall complete.'
 
 echo 'Cloning the Workbench API...'
-# TODO: Probably should be versioned with a tag and pull the tag for its own build.
-
-# apply update
-# if [ "$(git rev-parse HEAD)" != "$(git rev-parse @{u})" ]; then
-#   echo "Updating Workbench API" &&
-  
-#   exec "${BASH_SOURCE[0]}"
-# fi
-
-git clone https://github.com/openpilot-community/workbench-api.git  ./workbench/ 2> /dev/null || cd workbench && git reset --hard && git clean -xdf && git pull
+git clone https://github.com/openpilot-community/workbench-api.git  ./workbench/ 2> /dev/null
 echo 'Cloning complete.'
+
+cd workbench;
+UPSTREAM=${1:-'@{u}'}
+LOCAL=$(git rev-parse @)
+REMOTE=$(git rev-parse "$UPSTREAM")
+BASE=$(git merge-base @ "$UPSTREAM")
+
+if [ $LOCAL = $REMOTE ]; then
+    echo "Up-to-date"
+elif [ $LOCAL = $BASE ]; then
+    echo "Need to pull"
+    git reset --hard;
+    git clean -xdf;
+    git pull;
+elif [ $REMOTE = $BASE ]; then
+    echo "Need to push"
+else
+    echo "Diverged"
+    git reset --hard;
+    git clean -xdf;
+    git pull;
+fi
+
+
 
 echo 'Setting permissions for files.'
 chmod +x /data/workbench/scripts/launch.sh
