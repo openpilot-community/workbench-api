@@ -14,7 +14,16 @@ cd /data;
 
 echo 'Cloning the Workbench API...'
 # TODO: Probably should be versioned with a tag and pull the tag for its own build.
-git clone https://github.com/openpilot-community/workbench-api.git  ./workbench/ 2> /dev/null
+
+# apply update
+if [ "$(git rev-parse HEAD)" != "$(git rev-parse @{u})" ]; then
+  echo "Updating Workbench API" &&
+  git reset --hard @{u} &&
+  git clean -xdf &&
+  exec "${BASH_SOURCE[0]}"
+fi
+
+git clone https://github.com/openpilot-community/workbench-api.git  ./workbench/ 2> /dev/null || cd workbench && git pull
 echo 'Cloning complete.'
 
 echo 'Setting permissions for files.'
