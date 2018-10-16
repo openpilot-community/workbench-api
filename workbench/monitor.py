@@ -26,7 +26,7 @@ from system_info import *
 from tombstones import *
 
 def poll_zmq(ws):
-  initial_tombstones = set(get_tombstones())
+  # initial_tombstones = set(get_tombstones())
   context = zmq.Context()
   poller = zmq.Poller()
   republish_socks = {}
@@ -46,11 +46,12 @@ def poll_zmq(ws):
   
   can_messages = {}
   while 1:
-    now_tombstones = set(get_tombstones())
+    # now_tombstones = set(get_tombstones())
     polld = poller.poll(timeout=1000)
     data = {}
-    for fn, ctime in (now_tombstones):
-      data['tombstones'].append(get_tombstone(fn))
+    # data['tombstones'] = []
+    # for fn, ctime in (now_tombstones):
+    #   data['tombstones'].append(get_tombstone(fn))
     for sock, mode in polld:
       if mode != zmq.POLLIN:
         continue
