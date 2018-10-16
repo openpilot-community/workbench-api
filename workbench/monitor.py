@@ -41,6 +41,8 @@ def poll_zmq(ws):
     now_tombstones = set(get_tombstones())
     polld = poller.poll(timeout=1000)
     data = {}
+    data['openpilotParams'] = get_params()
+    data['system'] = get_system_info()
     for sock, mode in polld:
       if mode != zmq.POLLIN:
         continue
@@ -58,8 +60,6 @@ def poll_zmq(ws):
         fingerprint = json.loads('{' + fingerprint + '}')
         data['fingerprint'] = fingerprint
       if evt.which() == 'thermal':
-        data['openpilotParams'] = get_params()
-        data['system'] = get_system_info()
         data['tombstones'] = []
         for fn, ctime in (now_tombstones):
           # cloudlog.info("reporting new tombstone %s", fn)
