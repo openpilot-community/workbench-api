@@ -1,4 +1,4 @@
-
+import os
 def meminfo():
     ''' Return the information in /proc/meminfo
     as a dictionary '''
