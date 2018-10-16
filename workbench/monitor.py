@@ -31,7 +31,6 @@ def poll_zmq(ws):
   poller = zmq.Poller()
   republish_socks = {}
   service_whitelist = ["live100", "logMessage", "clocks", "androidLogEntry", "thermal", "health", "gpsLocation", "carState", "carControl"]
-  
   for m in service_list:
     port = service_list[m].port
     sock = messaging.sub_sock(context, port, poller, addr="127.0.0.1")
@@ -43,6 +42,9 @@ def poll_zmq(ws):
     data = {}
     data['openpilotParams'] = get_params()
     data['system'] = get_system_info()
+    data['tombstones'] = []
+    for fn, ctime in (now_tombstones):
+      data['tombstones'].append(get_tombstone(fn))
     for sock, mode in polld:
       if mode != zmq.POLLIN:
         continue
@@ -60,10 +62,7 @@ def poll_zmq(ws):
         fingerprint = json.loads('{' + fingerprint + '}')
         data['fingerprint'] = fingerprint
       if evt.which() == 'thermal':
-        data['tombstones'] = []
-        for fn, ctime in (now_tombstones):
-          # cloudlog.info("reporting new tombstone %s", fn)
-          data['tombstones'].append(get_tombstone(fn))
+        
         # report_tombstone(fn, client)
         
         initial_tombstones = now_tombstones
@@ -76,7 +75,7 @@ def poll_zmq(ws):
         # state_file.write(json.dumps(state))
         # state_file.close()
         ws.send_message_to_all(json.dumps(data))
-        time.sleep(1)
+        # time.sleep(1)
 
 #TODO: Someone better at Python than me can help clean this file up if they get time...
 def on_connect(client, ws):
