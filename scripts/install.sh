@@ -22,7 +22,7 @@ echo 'Cloning the Workbench API...'
 #   exec "${BASH_SOURCE[0]}"
 # fi
 
-git reset --hard && git clean -xdf && git clone https://github.com/openpilot-community/workbench-api.git  ./workbench/ 2> /dev/null || cd workbench && git pull
+git clone https://github.com/openpilot-community/workbench-api.git  ./workbench/ 2> /dev/null || cd workbench && git reset --hard && git clean -xdf && git pull
 echo 'Cloning complete.'
 
 echo 'Setting permissions for files.'
