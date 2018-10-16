@@ -1,12 +1,9 @@
 #!/usr/bin/env python
 # SYSTEM DEPENDENCIES
 import sys
-import argparse
 import json
 import time
-import platform
 import os
-import re
 import time
 import uuid
 import datetime
