@@ -1,3 +1,5 @@
+import os
+import re
 def get_tombstones():
   return [("/data/tombstones/"+fn, int(os.stat("/data/tombstones/"+fn).st_ctime) )
           for fn in os.listdir("/data/tombstones") if fn.startswith("tombstone")]

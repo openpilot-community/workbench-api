@@ -1,4 +1,5 @@
 import os
+from collections import OrderedDict, namedtuple
 def meminfo():
     ''' Return the information in /proc/meminfo
     as a dictionary '''
