@@ -37,7 +37,7 @@ def poll_zmq(ws):
   
   for m in service_list:
     port = service_list[m].port
-    sock = messaging.sub_sock(context, port, poller, addr=args.addr)
+    sock = messaging.sub_sock(context, port, poller, addr="127.0.0.1")
   
   can_messages = {}
   while 1:
