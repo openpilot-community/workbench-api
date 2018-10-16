@@ -10,12 +10,12 @@ cd /data;
 # TODO: This may change soon if we begin maintaining isolated releases for existing client installs...
 echo 'Uninstalling any existing Workbench related directories...'
 rm -rf ./workbench/;
-rm -f workbench.zip;
 echo 'Uninstall complete.'
 
 echo 'Cloning the Workbench API...'
 # TODO: Probably should be versioned with a tag and pull the tag for its own build.
 git clone https://github.com/openpilot-community/workbench-api.git ./workbench
+pip install python-socketio eventlet --target=./vendor
 echo 'Cloning complete.'
 
 echo 'Setting permissions for files.'

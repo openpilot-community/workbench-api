@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 from multiprocessing import Process
 import sys
-import fingerprint
-import monitor
-import server
-import ws_server
+import workbench.monitor
 
 def start_monitor():
   print '[started] Workbench Monitor'
