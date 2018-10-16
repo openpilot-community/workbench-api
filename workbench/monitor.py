@@ -30,7 +30,16 @@ def poll_zmq(ws):
   context = zmq.Context()
   poller = zmq.Poller()
   republish_socks = {}
-  service_whitelist = ["live100", "logMessage", "clocks", "androidLogEntry", "thermal", "health", "gpsLocation", "carState", "carControl"]
+
+  # SERVICES TO SEND TO CLIENT
+  service_whitelist = [
+    "thermal", 
+    "health", 
+    "gpsLocation", 
+    "carState", 
+    "carControl", 
+    "live100"
+  ]
   for m in service_list:
     port = service_list[m].port
     sock = messaging.sub_sock(context, port, poller, addr="127.0.0.1")
@@ -40,9 +49,6 @@ def poll_zmq(ws):
     now_tombstones = set(get_tombstones())
     polld = poller.poll(timeout=1000)
     data = {}
-    data['openpilotParams'] = get_params()
-    data['system'] = get_system_info()
-    data['tombstones'] = []
     for fn, ctime in (now_tombstones):
       data['tombstones'].append(get_tombstone(fn))
     for sock, mode in polld:
@@ -61,19 +67,18 @@ def poll_zmq(ws):
         fingerprint = ', '.join("\"%d\": %d" % v for v in sorted(can_messages.items()))
         fingerprint = json.loads('{' + fingerprint + '}')
         data['fingerprint'] = fingerprint
-      if evt.which() == 'thermal':
-        
-        # report_tombstone(fn, client)
-        
-        initial_tombstones = now_tombstones
+      # if evt.which() == 'thermal':
+      #   data[evt.which()] = evt.to_dict()[evt.which()]
       if evt.which() in service_whitelist:
         data[evt.which()] = evt.to_dict()[evt.which()]
-      
       if any(data):
         # state_file = open("/data/workbench/data/state.json", "w")
         # state = merge_state(state,data)
         # state_file.write(json.dumps(state))
         # state_file.close()
+        data['openpilotParams'] = get_params()
+        data['system'] = get_system_info()
+        data['tombstones'] = []
         ws.send_message_to_all(json.dumps(data))
         # time.sleep(1)
 
