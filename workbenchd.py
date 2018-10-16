@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from multiprocessing import Process
 import sys
-import workbench.monitor
+import workbench.monitor as monitor
 
 def start_monitor():
   print '[started] Workbench Monitor'
