@@ -45,7 +45,7 @@ def poll_zmq(ws):
     sock = messaging.sub_sock(context, port, poller, addr="127.0.0.1")
   
   can_messages = {}
-  while 1:
+  while True:
     # now_tombstones = set(get_tombstones())
     polld = poller.poll(timeout=1000)
     data = {}
@@ -81,7 +81,7 @@ def poll_zmq(ws):
         data['system'] = get_system_info()
         data['tombstones'] = []
         ws.send_message_to_all(json.dumps(data))
-        # time.sleep(1)
+        
 
 #TODO: Someone better at Python than me can help clean this file up if they get time...
 def on_connect(client, ws):
