@@ -15,7 +15,7 @@ PLEASE: I urge you to take a look at the Todos below and please reach out and fo
 
 - [ ] Find out how to install dependencies with pip locally without using system directories since of "Read-only file system" issues on EON devices.
 - [ ] Cleanup `monitor.py` and divide it into a library so that methods aren't all spaghetti'd in one file.
-- [ ] Create little mock files that can emulate feeds we're receiving form OP so we can develop on other platforms and deploy to EON safely.
+- [ ] Create little mock files that can emulate feeds we're receiving from OP so we can develop on other platforms and deploy to EON safely.
 - [ ] Now that its in its own repo, we want Workbench to send command to download an updated self-executing shell script from Git that installs and updates these services regularly.
 - [ ] A method to keep Workbench looking at the right version of the API that goes with the client.
   - How should Workbench keep its api codebase in sync with the version installed?

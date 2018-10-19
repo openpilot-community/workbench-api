@@ -25,7 +25,8 @@ from server import WebsocketServer
 from system_info import *
 from tombstones import *
 
-def poll_zmq(ws):
+
+def poll_zmq(webSocket):
   # initial_tombstones = set(get_tombstones())
   context = zmq.Context()
   poller = zmq.Poller()
@@ -40,11 +41,13 @@ def poll_zmq(ws):
     "carControl", 
     "live100"
   ]
-  for m in service_list:
-    port = service_list[m].port
+
+  for service in service_list:
+    port = service_list[service].port
     sock = messaging.sub_sock(context, port, poller, addr="127.0.0.1")
   
   can_messages = {}
+
   while True:
     # now_tombstones = set(get_tombstones())
     polld = poller.poll(timeout=1000)
@@ -80,20 +83,22 @@ def poll_zmq(ws):
         data['openpilotParams'] = get_params()
         data['system'] = get_system_info()
         data['tombstones'] = []
-        ws.send_message_to_all(json.dumps(data))
+        webSocket.send_message_to_all(json.dumps(data))
         
 
 #TODO: Someone better at Python than me can help clean this file up if they get time...
-def on_connect(client, ws):
+def on_connect(client, webSocket):
   print("Workbench Connected to Client %d" % client['id'])
-  poll_zmq(ws)
+  poll_zmq(webSocket)
+
 
 # Called for every client disconnecting
-def client_left(client, ws):
+def client_left(client, webSocket):
 	print("Client(%d) disconnected" % client['id'])
 
+
 # Called when a client sends a message
-def message_received(client, ws, message):
+def message_received(client, webSocket, message):
   json_message = json.loads(message)
 
   print("Received command:")
@@ -102,6 +107,7 @@ def message_received(client, ws, message):
   # Link them to methods or python scripts that perform various tasks.
 	# if len(message) > 200:
 	# 	message = message[:200]+'..'
+
 
 def merge_state(x, y):
   z = x.copy()   # start with x's keys and values
@@ -117,19 +123,22 @@ def get_params():
   CP = car.CarParams.from_bytes(params.get("CarParams", block=True))
 
   data = {
-    "passive": passive,
-    "is_metric": is_metric,
-    "car": CP.to_dict()
+  "passive": passive,
+  "is_metric": is_metric,
+  "car": CP.to_dict()
   }
+
   return data
+
 
 def main():
   PORT=4000
-  ws = WebsocketServer(PORT,host='0.0.0.0')
-  ws.set_fn_new_client(on_connect)
-  ws.set_fn_client_left(client_left)
-  ws.set_fn_message_received(message_received)
-  ws.run_forever()
+  webSocket = WebsocketServer(PORT,host='0.0.0.0')
+  webSocket.set_fn_new_client(on_connect)
+  webSocket.set_fn_client_left(client_left)
+  webSocket.set_fn_message_received(message_received)
+  webSocket.run_forever()
+
 
 if __name__ == '__main__':
   main()
