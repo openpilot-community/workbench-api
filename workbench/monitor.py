@@ -21,7 +21,7 @@ import selfdrive.messaging as messaging
 from selfdrive.services import service_list
 
 # WORKBENCH
-from server import webSocketServer
+from server import WebsocketServer
 from system_info import *
 from tombstones import *
 
