@@ -5,6 +5,14 @@ It used to be included in Workbench but decided it should exist separately as it
 
 A seasoned Python dev could easily assist with this without having to worry about the funky deployments of the Workbench desktop repository.
 
+### Help Support Openpilot Community Efforts
+
+The Openpilot Community or jfrux are funded by Comma.ai, Inc. or any other commercial entity.
+Your support is all we have.  Growing expenses with opc.ai, cloud hosting, and costs running great services for the community is not free.
+If you have a few bucks, please consider [becoming a patreon](https://patreon.com/openpilotcommunity) for the Openpilot Community and support further uptime and dev time.  Finances will be out in the open on the patreon page for everyone to see.
+
+https://patreon.com/openpilotcommunity
+
 ## Contributing
 
 First off, I'm not a Python developer so this is probably somehow a sin amongst Python itself so help me clean it up if you feel so inclined.  Keep in mind that this runs on a Read-only file system... so we need to get it so that we can install dependencies and things in a local environment somehow that isn't in the base system path.
